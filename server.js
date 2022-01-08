@@ -3,14 +3,22 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+
+// capture environment variables
+require("dotenv").config();
+
 const bodyparser = require("body-parser");
 const Razorpay = require("razorpay");
 
-app.use(require("body-parser").json());
+app.use(bodyparser.json());
+
+// middleware to serve static files from the directory 'img'
+app.use(express.static(__dirname + "/img"));
 
 var instance = new Razorpay({
-    key_id: "rzp_test_pZwXqv9JMfY8ls",
-    key_secret: "1GRGhFfm789r5jKLv8ZKRPB2"
+    // prevents in exposing the secret keys
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET
 });
 
 app.get("/", (req, res) => {
